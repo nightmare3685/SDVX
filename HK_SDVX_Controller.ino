@@ -1,6 +1,8 @@
 #include <HID-Project.h>
 #include <HID-Settings.h>
 
+//char keymap[100] = {  's',  'd',  'k',  'l',  'c',  'm',};
+char BT_A = 's', BT_B = 'd', BT_C = 'k', BT_D = 'l', FX_L = 'c', FX_R = 'm';
 
 
 void setup() {
@@ -18,19 +20,19 @@ void keyfunc() {
   Serial.println(!digitalRead(0));
 
   if (!digitalRead(0) == HIGH) {
-    NKROKeyboard.add('s');
-    NKROKeyboard.add('d');
-    NKROKeyboard.add('k');
-    NKROKeyboard.add('l');
-    NKROKeyboard.add('c');
-    NKROKeyboard.add('m');
+    NKROKeyboard.add(BT_A);
+    NKROKeyboard.add(BT_B);
+    NKROKeyboard.add(BT_C);
+    NKROKeyboard.add(BT_D);
+    NKROKeyboard.add(FX_L);
+    NKROKeyboard.add(FX_R);
   } else if (!digitalRead(0) == LOW) {
-    NKROKeyboard.remove('s');
-    NKROKeyboard.remove('d');
-    NKROKeyboard.remove('k');
-    NKROKeyboard.remove('l');
-    NKROKeyboard.remove('c');
-    NKROKeyboard.remove('m');
+    NKROKeyboard.remove(BT_A);
+    NKROKeyboard.remove(BT_B);
+    NKROKeyboard.remove(BT_C);
+    NKROKeyboard.remove(BT_D);
+    NKROKeyboard.remove(FX_L);
+    NKROKeyboard.remove(FX_R);
   }
   NKROKeyboard.send();
 }
