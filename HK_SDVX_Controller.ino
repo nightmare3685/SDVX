@@ -5,17 +5,15 @@
 
 class Button {
 public:
-  char keymap[100] = { 's', 'd', 'k', 'l', 'c', 'm' /*6:Enter 7:ESC*/ };
+  char keymap[10] = { 's', 'd', 'k', 'l', 'c', 'm' /*6:Enter 7:ESC*/ };
   char BT_A = keymap[0], BT_B = keymap[1], BT_C = keymap[2], BT_D = keymap[3], FX_L = keymap[4], FX_R = keymap[5];
   char VOL_L = 0, VOL_R = 1;
 private:
   ;
 };
 
-volatile byte pos;
-volatile byte pos2[2];
-volatile int right = 0, left = 0;
-volatile int right2 = 0, left2 = 0;
+volatile byte posision[2];
+
 volatile int Arrayright[2] = { 0, 0 };
 volatile int Arrayleft[2] = { 0, 0 };
 Button button;
@@ -49,10 +47,10 @@ void ReduseValue() {
 
 void keyFunc() {
 
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i <  (sizeof(button.keymap) / sizeof(int)); i++) {
     if (!digitalRead(i) == HIGH) {
       NKROKeyboard.add(button.keymap[i]);
-    } else if (!digitalRead(i) == LOW) {
+    } else if (!digitalRead(i) == LOW) { 
       NKROKeyboard.remove(button.keymap[i]);
     }
   }
@@ -100,8 +98,8 @@ void TimerIRQ() {
       currentWave[i] = 2;
     else if (currentWave[i] == 2)
       currentWave[i] = 3;                          //回転すると0 1 3 2となるので無理やり2を3、3を2にして0 1 2 3 にする
-    oldWave[i] = pos2[i] & B00000011;              //pos(curとoldが0000AB A'B'として入ってる変数)と＆演算して000000A'B'だけ代入する
-    pos2[i] = (oldWave[i] << 2) + currentWave[i];  //回転信号を0000AB A'B'として代入
+    oldWave[i] = posision[i] & B00000011;              //pos(curとoldが0000AB A'B'として入ってる変数)と＆演算して000000A'B'だけ代入する
+    posision[i] = (oldWave[i] << 2) + currentWave[i];  //回転信号を0000AB A'B'として代入
 
     bool isleft =
       (currentWave[i] == 0 && oldWave[i] == 1) || (currentWave[i] == 1 && oldWave[i] == 2) || (currentWave[i] == 2 && oldWave[i] == 3) || (currentWave[i] == 3 && oldWave[i] == 0);
