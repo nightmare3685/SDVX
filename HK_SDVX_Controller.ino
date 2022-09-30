@@ -20,7 +20,7 @@ Button button;
 
 void setup()
 {
-
+  NKROKeyboard.begin();
   FlexiTimer2::set(5, 1.0 / 100000, TimerIRQ); //タイマー割り込み 引数1:時間 引数2:時間の単位 引数3:割り込む関数
   FlexiTimer2::start();                        //タイマ割込み実行
   Serial.begin(115200);
@@ -56,7 +56,7 @@ void ReduseValue()
 
 void keyFunc()
 {
-  NKROKeyboard.begin();
+
   for (int i = 0; i < (sizeof(button.keymap) / sizeof(char)); i++)
   {
     if (!digitalRead(i) == HIGH)
@@ -75,7 +75,6 @@ void keyFunc()
   Arrayleft[button.VOL_R] > 0 ? NKROKeyboard.add(button.VOL_RL) : NKROKeyboard.remove(button.VOL_RL);  //右のつまみが左回転
 
   NKROKeyboard.send();
-  NKROKeyboard.end();
 }
 
 void TimerIRQ()
