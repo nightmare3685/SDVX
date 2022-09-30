@@ -12,6 +12,7 @@ private:
   ;
 };
 
+
 volatile int posision[2] = { 0, 0 };
 volatile int Arrayright[2] = { 0, 0 };
 volatile int Arrayleft[2] = { 0, 0 };
@@ -87,25 +88,25 @@ void keyFunc() {
 
 void TimerIRQ() {
   int currentWave[2];  //最新のロータリー信号
-  int oldWave[2];      //ひとつ前の信号
+  int OldWave[2];      //ひとつ前の信号
 
 
   currentWave[button.VOL_L] = (!digitalRead(10) << 1) + !digitalRead(11);  //A相とB相の信号を 000000ABとして変数に代入
   currentWave[button.VOL_R] = (!digitalRead(12) << 1) + !digitalRead(13);  //A相とB相の信号を 000000ABとして変数に代入
 
-  for (int i = 0; i <= (sizeof(currentWave) / sizeof(int)); i++) {
+  for(int i = 0; i  < (sizeof(currentWave) / sizeof(int)); i++) {
 
     if (currentWave[i] == 3)
       currentWave[i] = 2;
     else if (currentWave[i] == 2)
       currentWave[i] = 3;                              //回転すると0 1 3 2となるので無理やり2を3、3を2にして0 1 2 3 にする
-    oldWave[i] = posision[i] & B00000011;              //pos(curとoldが0000AB A'B'として入ってる変数)と＆演算して000000A'B'だけ代入する
-    posision[i] = (oldWave[i] << 2) + currentWave[i];  //回転信号を0000AB A'B'として代入
+    OldWave[i] = posision[i] & B00000011;              //pos(curとoldが0000AB A'B'として入ってる変数)と＆演算して000000A'B'だけ代入する
+    posision[i] = (OldWave[i] << 2) + currentWave[i];  //回転信号を0000AB A'B'として代入
 
     bool isleft =
-      (currentWave[i] == 0 && oldWave[i] == 1) || (currentWave[i] == 1 && oldWave[i] == 2) || (currentWave[i] == 2 && oldWave[i] == 3) || (currentWave[i] == 3 && oldWave[i] == 0);
+      (currentWave[i] == 0 && OldWave[i] == 1) || (currentWave[i] == 1 && OldWave[i] == 2) || (currentWave[i] == 2 && OldWave[i] == 3) || (currentWave[i] == 3 && OldWave[i] == 0);
     bool isright =
-      (currentWave[i] == 0 && oldWave[i] == 3) || (currentWave[i] == 1 && oldWave[i] == 0) || (currentWave[i] == 2 && oldWave[i] == 1) || (currentWave[i] == 3 && oldWave[i] == 2);
+      (currentWave[i] == 0 && OldWave[i] == 3) || (currentWave[i] == 1 && OldWave[i] == 0) || (currentWave[i] == 2 && OldWave[i] == 1) || (currentWave[i] == 3 && OldWave[i] == 2);
 
     if (isleft) {  //反時計回りに回った時
       Arrayleft[i] = 100;
