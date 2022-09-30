@@ -1,13 +1,13 @@
 #include <HID-Project.h>
-//#include <HID-Settings.h>
+#include <HID-Settings.h>
 #include <FlexiTimer2.h>
 
 class Button
 {
 public:
-  char keymap[6] = {'s', 'd', 'k', 'l', 'c', 'm' /*6:Enter 7:ESC*/};
-  char VOL_L = 0, VOL_R = 1;
-  char VOL_LL = 'q', VOL_LR = 'w', VOL_RL = 'o', VOL_RR = 'p';
+  const char keymap[6] = {'s', 'd', 'k', 'l', 'c', 'm' /*6:Enter 7:ESC*/};
+  const char VOL_L = 0, VOL_R = 1;
+  const char VOL_LL = 'q', VOL_LR = 'w', VOL_RL = 'o', VOL_RR = 'p';
 
 private:
   ;
@@ -69,40 +69,10 @@ void keyFunc()
     }
   }
 
-  if (Arrayright[button.VOL_L] > 0)
-  { //左のつまみが右回転
-    NKROKeyboard.add(button.VOL_LR);
-  }
-  else
-  {
-    NKROKeyboard.remove(button.VOL_LR);
-  }
-  if (Arrayleft[button.VOL_L] > 0)
-  {
-    NKROKeyboard.add(button.VOL_LL); //左のつまみが左回転
-  }
-  else
-  {
-    NKROKeyboard.remove(button.VOL_LL);
-  }
-
-  if (Arrayright[button.VOL_R] > 0)
-  { //右のつまみが右回転
-    NKROKeyboard.add(button.VOL_RR);
-  }
-  else
-  {
-    NKROKeyboard.remove(button.VOL_RR);
-  }
-
-  if (Arrayleft[button.VOL_R] > 0)
-  { //右のつまみが左回転
-    NKROKeyboard.add(button.VOL_RL);
-  }
-  else
-  {
-    NKROKeyboard.remove(button.VOL_RL);
-  }
+  Arrayright[button.VOL_L] > 0 ? NKROKeyboard.add(button.VOL_LR) : NKROKeyboard.remove(button.VOL_LR); //左のつまみが右回転
+  Arrayright[button.VOL_R] > 0 ? NKROKeyboard.add(button.VOL_RR) : NKROKeyboard.remove(button.VOL_RR); //右のつまみが右回転
+  Arrayleft[button.VOL_L] > 0 ? NKROKeyboard.add(button.VOL_LL) : NKROKeyboard.remove(button.VOL_LL);  //左のつまみが左回転
+  Arrayleft[button.VOL_R] > 0 ? NKROKeyboard.add(button.VOL_RL) : NKROKeyboard.remove(button.VOL_RL);  //右のつまみが左回転
 
   NKROKeyboard.send();
 }
