@@ -1,5 +1,5 @@
 #include <HID-Project.h>
-#include <HID-Settings.h>
+//#include <HID-Settings.h>
 #include <FlexiTimer2.h>
 
 class Button
@@ -109,26 +109,26 @@ void keyFunc()
 
 void TimerIRQ()
 {
-  int CurrentWave[2]; //最新のロータリー信号
+  int currentWave[2]; //最新のロータリー信号
   int OldWave[2];     //ひとつ前の信号
 
-  CurrentWave[button.VOL_L] = (!digitalRead(10) << 1) + !digitalRead(11); // A相とB相の信号を 000000ABとして変数に代入ｔ
-  CurrentWave[button.VOL_R] = (!digitalRead(12) << 1) + !digitalRead(13); // A相とB相の信号を 000000ABとして変数に代入
+  currentWave[button.VOL_L] = (!digitalRead(10) << 1) + !digitalRead(11); // A相とB相の信号を 000000ABとして変数に代入
+  currentWave[button.VOL_R] = (!digitalRead(12) << 1) + !digitalRead(13); // A相とB相の信号を 000000ABとして変数に代入
 
-  for (int i = 0; i < (sizeof(CurrentWave) / sizeof(int)); i++)
+  for (int i = 0; i <= (sizeof(currentWave) / sizeof(int)); i++)
   {
 
-    if (CurrentWave[i] == 3)
-      CurrentWave[i] = 2;
-    else if (CurrentWave[i] == 2)
-      CurrentWave[i] = 3;                             //回転すると0 1 3 2となるので無理やり2を3、3を2にして0 1 2 3 にする
+    if (currentWave[i] == 3)
+      currentWave[i] = 2;
+    else if (currentWave[i] == 2)
+      currentWave[i] = 3;                             //回転すると0 1 3 2となるので無理やり2を3、3を2にして0 1 2 3 にする
     OldWave[i] = posision[i] & B00000011;             // pos(curとoldが0000AB A'B'として入ってる変数)と＆演算して000000A'B'だけ代入する
-    posision[i] = (OldWave[i] << 2) + CurrentWave[i]; //回転信号を0000AB A'B'として代入
+    posision[i] = (OldWave[i] << 2) + currentWave[i]; //回転信号を0000AB A'B'として代入
 
     bool isleft =
-        (CurrentWave[i] == 0 && OldWave[i] == 1) || (CurrentWave[i] == 1 && OldWave[i] == 2) || (CurrentWave[i] == 2 && OldWave[i] == 3) || (CurrentWave[i] == 3 && OldWave[i] == 0);
+        (currentWave[i] == 0 && OldWave[i] == 1) || (currentWave[i] == 1 && OldWave[i] == 2) || (currentWave[i] == 2 && OldWave[i] == 3) || (currentWave[i] == 3 && OldWave[i] == 0);
     bool isright =
-        (CurrentWave[i] == 0 && OldWave[i] == 3) || (CurrentWave[i] == 1 && OldWave[i] == 0) || (CurrentWave[i] == 2 && OldWave[i] == 1) || (CurrentWave[i] == 3 && OldWave[i] == 2);
+        (currentWave[i] == 0 && OldWave[i] == 3) || (currentWave[i] == 1 && OldWave[i] == 0) || (currentWave[i] == 2 && OldWave[i] == 1) || (currentWave[i] == 3 && OldWave[i] == 2);
 
     if (isleft)
     { //反時計回りに回った時
