@@ -20,6 +20,7 @@ Button button;
 
 void setup()
 {
+  NKROKeyboard.begin();
   FlexiTimer2::set(5, 1.0 / 10000000, TimerIRQ); //タイマー割り込み 引数1:時間 引数2:時間の単位 引数3:割り込む関数
   FlexiTimer2::start();                          //タイマ割込み実行
   Serial.begin(115200);
